@@ -1,32 +1,32 @@
 package nl.codecontrol.photoz.rest;
 
-import jakarta.validation.Valid;
 import nl.codecontrol.photoz.model.Photo;
+import nl.codecontrol.photoz.service.PhotozService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import static java.util.Objects.isNull;
 
 @RestController
 public class PhotozController {
 
-    private final Map<Long, Photo> db = new HashMap<>(){{
-        put(1L, new Photo(1L, "hello.jpg"));
-    }};
+    @Autowired
+    private PhotozService photozService;
 
     @GetMapping("/photoz")
     public Collection<Photo> get() {
-        return db.values();
+        return photozService.get();
     }
 
     @GetMapping("/photoz/{id}")
     public Photo get(@PathVariable long id) {
-        final Photo photo = db.get(id);
+        final Photo photo = photozService.get(id);
         if (isNull(photo)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
@@ -35,18 +35,14 @@ public class PhotozController {
 
     @DeleteMapping("/photoz/{id}")
     public void delete(@PathVariable long id) {
-        final Photo photo = db.remove(id);
+        final Photo photo = photozService.delete(id);
         if (isNull(photo)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping("/photoz")
-    public Photo create(@RequestBody @Valid Photo photo) {
-
-        final var id = db.keySet().stream().max(Long::compare).get() + 1;
-        photo.setId(id);
-        db.put(photo.getId(), photo);
-        return photo;
+    public Photo create(@RequestPart("data") MultipartFile file) throws IOException {
+        return photozService.save(file.getOriginalFilename(), file.getBytes());
     }
 }
