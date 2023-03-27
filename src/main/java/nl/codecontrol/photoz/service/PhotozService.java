@@ -11,7 +11,7 @@ import java.util.Map;
 public class PhotozService {
 
     private final Map<Long, Photo> db = new HashMap<>(){{
-        put(1L, new Photo(1L, "hello.jpg", null));
+        put(1L, new Photo(1L, "hello.jpg", "", null));
     }};
 
     public Collection<Photo> get() {
@@ -26,14 +26,16 @@ public class PhotozService {
         return db.remove(id);
     }
 
-    public Photo save(String filename, byte[] data) {
-        final Photo photo = new Photo();
+    public Photo save(String filename, String contentType, byte[] data) {
         final var id = db.keySet().stream().max(Long::compare).get() + 1;
-        photo.setId(id);
-        photo.setFilename(filename);
-        photo.setData(data);
-        db.put(photo.getId(), photo);
+        final var photo = Photo.builder()
+                .id(id)
+                .filename(filename)
+                .contentType(contentType)
+                .data(data)
+                .build();
 
+        db.put(photo.getId(), photo);
         return photo;
     }
 }
