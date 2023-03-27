@@ -1,5 +1,6 @@
 package nl.codecontrol.photoz.rest;
 
+import jakarta.validation.Valid;
 import nl.codecontrol.photoz.model.Photo;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class PhotozController {
     }
 
     @PostMapping("/photoz")
-    public Photo create(@RequestBody Photo photo) {
+    public Photo create(@RequestBody @Valid Photo photo) {
 
         final var id = db.keySet().stream().max(Long::compare).get() + 1;
         photo.setId(id);
