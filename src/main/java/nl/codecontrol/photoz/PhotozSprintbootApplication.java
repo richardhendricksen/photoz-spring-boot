@@ -1,4 +1,4 @@
-package nl.codecontrol.photozsprintboot;
+package nl.codecontrol.photoz;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
