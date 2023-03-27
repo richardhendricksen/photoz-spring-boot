@@ -2,7 +2,6 @@ package nl.codecontrol.photoz.rest;
 
 import nl.codecontrol.photoz.model.Photo;
 import nl.codecontrol.photoz.service.PhotozService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +13,11 @@ import static java.util.Objects.isNull;
 @RestController
 public class DownloadController {
 
-    @Autowired
-    private PhotozService photozService;
+    private final PhotozService photozService;
+
+    public DownloadController(PhotozService photozService) {
+        this.photozService = photozService;
+    }
 
     @GetMapping("/download/{id}")
     public ResponseEntity<byte[]> download(@PathVariable long id) {
@@ -26,7 +28,7 @@ public class DownloadController {
         }
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(photo.getContentType()));
-        headers.setContentDisposition(ContentDisposition.attachment().filename(photo.getFilename()).build());
+        headers.setContentDisposition(ContentDisposition.attachment().filename(photo.getFileName()).build());
 
         return new ResponseEntity<>(photo.getData(), headers, HttpStatus.OK);
     }

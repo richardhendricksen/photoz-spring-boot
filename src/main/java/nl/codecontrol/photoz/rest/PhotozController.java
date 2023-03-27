@@ -2,25 +2,26 @@ package nl.codecontrol.photoz.rest;
 
 import nl.codecontrol.photoz.model.Photo;
 import nl.codecontrol.photoz.service.PhotozService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import static java.util.Objects.isNull;
 
 @RestController
 public class PhotozController {
 
-    @Autowired
-    private PhotozService photozService;
+    private final PhotozService photozService;
+
+    public PhotozController(PhotozService photozService) {
+        this.photozService = photozService;
+    }
 
     @GetMapping("/photoz")
-    public Collection<Photo> get() {
+    public Iterable<Photo> get() {
         return photozService.get();
     }
 
@@ -35,10 +36,7 @@ public class PhotozController {
 
     @DeleteMapping("/photoz/{id}")
     public void delete(@PathVariable long id) {
-        final Photo photo = photozService.delete(id);
-        if (isNull(photo)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        photozService.delete(id);
     }
 
     @PostMapping("/photoz")
