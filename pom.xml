@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>nl.codecontrol</groupId>
-	<artifactId>photoz-sprintboot</artifactId>
+	<artifactId>photoz-springboot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>photoz-sprintboot</name>
+	<name>photoz-springboot</name>
 	<description>Photoz</description>
 	<properties>
 		<java.version>17</java.version>
