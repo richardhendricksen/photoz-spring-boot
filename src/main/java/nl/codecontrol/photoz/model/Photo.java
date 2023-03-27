@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class Photo {
 
-    private long id;
+    private Long id;
     private String filename;
 }
